@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>説明禁止ワードゲーム コントロールパネル</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="layout">
+      <section class="panel" aria-labelledby="gm-panel-heading">
+        <header class="panel-header">
+          <h1 id="gm-panel-heading">GMコントロール</h1>
+          <div class="status">
+            <span class="status-label">読み込み:</span>
+            <span id="data-status" class="status-value">準備中…</span>
+          </div>
+        </header>
+
+        <div class="controls">
+          <div class="button-group">
+            <button id="draw-topic" class="btn primary" type="button">ランダム抽選</button>
+            <button id="redraw-topic" class="btn" type="button" disabled>再抽選</button>
+          </div>
+
+          <article class="card" aria-live="polite">
+            <h2 class="card-title">お題</h2>
+            <p id="topic-title" class="topic-title">—</p>
+            <dl class="topic-meta">
+              <div>
+                <dt>カテゴリ</dt>
+                <dd id="topic-category">—</dd>
+              </div>
+              <div>
+                <dt>学年</dt>
+                <dd id="topic-grade">—</dd>
+              </div>
+              <div>
+                <dt>難易度</dt>
+                <dd id="topic-difficulty">—</dd>
+              </div>
+            </dl>
+            <p id="topic-notes" class="topic-notes"></p>
+          </article>
+
+          <article class="card bans-card">
+            <h2 class="card-title">NG候補 (6語)</h2>
+            <ul id="ban-list" class="ban-list" aria-label="NG候補6語">
+              <li>—</li>
+              <li>—</li>
+              <li>—</li>
+              <li>—</li>
+              <li>—</li>
+              <li>—</li>
+            </ul>
+          </article>
+
+          <article class="card bans-card">
+            <h2 class="card-title">抽選NG (3語)</h2>
+            <ul id="picked-ban-list" class="ban-list picked" aria-label="抽選されたNG3語">
+              <li>—</li>
+              <li>—</li>
+              <li>—</li>
+            </ul>
+          </article>
+
+          <div class="button-group">
+            <button id="copy-dm" class="btn" type="button" disabled>DMコピー</button>
+            <button id="show-answer" class="btn" type="button" disabled>正解表示</button>
+          </div>
+        </div>
+
+        <footer class="help">
+          <p>Space: タイマー開始/停止 · R: リセット</p>
+        </footer>
+      </section>
+
+      <section class="panel shared" aria-labelledby="shared-heading">
+        <header class="panel-header">
+          <h2 id="shared-heading">共有画面</h2>
+          <div class="round-indicator">
+            <label for="round-input">ラウンド</label>
+            <input id="round-input" type="number" min="1" value="1" />
+          </div>
+        </header>
+        <div class="shared-body">
+          <div class="timer-display" aria-live="assertive">
+            <span id="timer-value">60</span>
+            <span class="timer-unit">秒</span>
+          </div>
+          <div id="answer-display" class="answer-display" hidden>
+            <span class="answer-label">正解：</span>
+            <span id="answer-text"></span>
+          </div>
+          <div class="shared-actions">
+            <button id="timer-start" class="btn primary" type="button">開始</button>
+            <button id="timer-stop" class="btn" type="button" disabled>停止</button>
+            <button id="timer-reset" class="btn" type="button" disabled>リセット</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <template id="dm-template">【お題】{{topic}}\n【NGワード】{{ngWords}}</template>
+
+    <dialog id="error-dialog">
+      <h2>エラー</h2>
+      <p id="error-message"></p>
+      <button id="dialog-close" class="btn primary" type="button">閉じる</button>
+    </dialog>
+
+    <script type="module" src="main.js"></script>
+  </body>
+</html>
