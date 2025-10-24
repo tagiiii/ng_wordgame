@@ -3,28 +3,27 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>説明禁止ワードゲーム コントロールパネル</title>
+    <title>説明禁止ワードゲーム コントロール</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <main class="layout">
-      <section class="panel" aria-labelledby="gm-panel-heading">
-        <header class="panel-header">
-          <h1 id="gm-panel-heading">GMコントロール</h1>
-          <div class="status">
-            <span class="status-label">読み込み:</span>
-            <span id="data-status" class="status-value">準備中…</span>
-          </div>
-        </header>
+    <div class="app">
+      <header class="app-header">
+        <h1>説明禁止ワードゲーム</h1>
+        <span id="status-text" class="status-text">データ読込中…</span>
+      </header>
 
-        <div class="controls">
-          <div class="button-group">
-            <button id="draw-topic" class="btn primary" type="button">ランダム抽選</button>
-            <button id="redraw-topic" class="btn" type="button" disabled>再抽選</button>
+      <main class="layout">
+        <section class="panel gm" aria-labelledby="gm-heading">
+          <h2 id="gm-heading">GMパネル</h2>
+
+          <div class="control-row">
+            <button id="btn-draw" class="btn primary" type="button" disabled>ランダム抽選</button>
+            <button id="btn-redraw" class="btn" type="button" disabled>再抽選</button>
           </div>
 
-          <article class="card" aria-live="polite">
-            <h2 class="card-title">お題</h2>
+          <article class="card">
+            <h3>お題</h3>
             <p id="topic-title" class="topic-title">—</p>
             <dl class="topic-meta">
               <div>
@@ -32,7 +31,7 @@
                 <dd id="topic-category">—</dd>
               </div>
               <div>
-                <dt>学年</dt>
+                <dt>対象学年</dt>
                 <dd id="topic-grade">—</dd>
               </div>
               <div>
@@ -43,9 +42,9 @@
             <p id="topic-notes" class="topic-notes"></p>
           </article>
 
-          <article class="card bans-card">
-            <h2 class="card-title">NG候補 (6語)</h2>
-            <ul id="ban-list" class="ban-list" aria-label="NG候補6語">
+          <article class="card">
+            <h3>NG候補 (6語)</h3>
+            <ul id="ng-candidates" class="ng-list">
               <li>—</li>
               <li>—</li>
               <li>—</li>
@@ -55,59 +54,51 @@
             </ul>
           </article>
 
-          <article class="card bans-card">
-            <h2 class="card-title">抽選NG (3語)</h2>
-            <ul id="picked-ban-list" class="ban-list picked" aria-label="抽選されたNG3語">
+          <article class="card">
+            <h3>抽選NG (3語)</h3>
+            <ul id="ng-picked" class="ng-list picked">
               <li>—</li>
               <li>—</li>
               <li>—</li>
             </ul>
           </article>
 
-          <div class="button-group">
-            <button id="copy-dm" class="btn" type="button" disabled>DMコピー</button>
-            <button id="show-answer" class="btn" type="button" disabled>正解表示</button>
+          <div class="control-row">
+            <button id="btn-copy" class="btn" type="button" disabled>DMコピー</button>
+            <button id="btn-answer" class="btn" type="button" disabled>正解表示</button>
           </div>
-        </div>
 
-        <footer class="help">
-          <p>Space: タイマー開始/停止 · R: リセット</p>
-        </footer>
-      </section>
+          <div id="copy-feedback" class="copy-feedback" role="status" aria-live="polite"></div>
+        </section>
 
-      <section class="panel shared" aria-labelledby="shared-heading">
-        <header class="panel-header">
-          <h2 id="shared-heading">共有画面</h2>
-          <div class="round-indicator">
-            <label for="round-input">ラウンド</label>
-            <input id="round-input" type="number" min="1" value="1" />
+        <section class="panel broadcast" aria-labelledby="broadcast-heading">
+          <div class="broadcast-header">
+            <h2 id="broadcast-heading">共有画面</h2>
+            <label class="round-label" for="round-number">ラウンド</label>
+            <input id="round-number" type="number" min="1" value="1" />
           </div>
-        </header>
-        <div class="shared-body">
-          <div class="timer-display" aria-live="assertive">
-            <span id="timer-value">60</span>
+
+          <div class="timer" aria-live="assertive">
+            <span id="timer-display" class="timer-value">60</span>
             <span class="timer-unit">秒</span>
           </div>
-          <div id="answer-display" class="answer-display" hidden>
-            <span class="answer-label">正解：</span>
-            <span id="answer-text"></span>
-          </div>
-          <div class="shared-actions">
-            <button id="timer-start" class="btn primary" type="button">開始</button>
-            <button id="timer-stop" class="btn" type="button" disabled>停止</button>
-            <button id="timer-reset" class="btn" type="button" disabled>リセット</button>
-          </div>
-        </div>
-      </section>
-    </main>
 
-    <template id="dm-template">【お題】{{topic}}\n【NGワード】{{ngWords}}</template>
+          <div id="answer-box" class="answer-box" hidden>
+            <span class="answer-label">正解</span>
+            <span id="answer-text" class="answer-text"></span>
+          </div>
 
-    <dialog id="error-dialog">
-      <h2>エラー</h2>
-      <p id="error-message"></p>
-      <button id="dialog-close" class="btn primary" type="button">閉じる</button>
-    </dialog>
+          <div class="control-row">
+            <button id="btn-start" class="btn primary" type="button">開始</button>
+            <button id="btn-stop" class="btn" type="button" disabled>停止</button>
+            <button id="btn-reset" class="btn" type="button" disabled>リセット</button>
+          </div>
+
+          <p class="hint">Space: 開始/停止・R: リセット</p>
+        </section>
+      </main>
+
+    </div>
 
     <script type="module" src="main.js"></script>
   </body>
